@@ -9,22 +9,23 @@ import Foundation
 import Firebase
 import Combine
 
-final class RegisterViewViewModel : ObservableObject {
+final class AuthenticationViewViewModel : ObservableObject {
     
     @Published var email : String?
     @Published var password : String?
-    @Published var isRegistrationFormValid : Bool = false
+    @Published var isAuthenticationFormValid : Bool = false
     @Published var user : User?
+    @Published var error : String?
     
     private var subscriptions : Set<AnyCancellable> = []
     
-    func validateRegistrationForm(){
+    func validateAuthenticationForm(){
         guard let email = email,
               let password = password else {
-            isRegistrationFormValid = false
+            isAuthenticationFormValid = false
             return
         }
-        isRegistrationFormValid = isValidEmail(email) && password.count >= 8
+        isAuthenticationFormValid = isValidEmail(email) && password.count >= 8
     }
     
     func isValidEmail(_ email: String) -> Bool {
@@ -39,7 +40,28 @@ final class RegisterViewViewModel : ObservableObject {
               let password = password else {return}
                 
         AuthManager.shared.registerUser(with: email, password: password)
-            .sink { _ in
+            .sink { [weak self] completion in
+                
+                if  case .failure(let error) = completion {
+                    self?.error = error.localizedDescription
+                }
+            } receiveValue: { [weak self] user in
+                self?.user = user
+            }
+            .store(in: &subscriptions)
+
+        
+    }
+    func loginUser(){
+        guard let email = email,
+              let password = password else {return}
+                
+        AuthManager.shared.loginUser(with: email, password: password)
+            .sink { [weak self] completion in
+                
+                if  case .failure(let error) = completion {
+                    self?.error = error.localizedDescription
+                }
                 
             } receiveValue: { [weak self] user in
                 self?.user = user
@@ -48,6 +70,7 @@ final class RegisterViewViewModel : ObservableObject {
 
         
     }
+
 
 }
 
