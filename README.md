@@ -1,3 +1,6 @@
 # Twitter_Clone
 
-working...
+Twitter Clone for iOS ,using Swift UIKit(programmatically) and Firebase.
+
+Work in Progress ...
+
