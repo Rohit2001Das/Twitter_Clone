@@ -25,6 +25,7 @@ class LoginViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.keyboardType = .emailAddress
+        textField.autocapitalizationType = .none
         textField.attributedPlaceholder = NSAttributedString(
             string: "Email",
             attributes : [NSAttributedString.Key.foregroundColor : UIColor.gray]
@@ -94,6 +95,7 @@ class LoginViewController: UIViewController {
         alert.addAction(okayButton)
         present(alert, animated: true)
     }
+    
     @objc private func didTapToDismiss(){
         view.endEditing(true)
     }

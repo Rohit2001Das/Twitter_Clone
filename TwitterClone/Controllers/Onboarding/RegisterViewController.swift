@@ -25,6 +25,7 @@ class RegisterViewController: UIViewController {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.keyboardType = .emailAddress
+        textField.autocapitalizationType = .none
         textField.attributedPlaceholder = NSAttributedString(
             string: "Email",
             attributes : [NSAttributedString.Key.foregroundColor : UIColor.gray]
